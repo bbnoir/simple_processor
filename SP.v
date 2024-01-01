@@ -170,9 +170,7 @@ always@(posedge clk or negedge rst_n) begin
 		out_valid <= 0;
 		out_valid_buf <= 0;
 		inst_addr <= 0;
-		for (i=0; i<32; i=i+1) begin
-			r[i] <= 0;
-		end
+		for (i=0; i<32; i=i+1) r[i] <= 0;
 		inst_reg <= 0;
 		ALU_out_reg <= 0;
 	end
@@ -180,9 +178,7 @@ always@(posedge clk or negedge rst_n) begin
 		out_valid <= out_valid_buf; // delay 1 cycle
 		out_valid_buf <= in_valid;
 		inst_addr <= inst_addr_nxt;
-		for (i=0; i<32; i=i+1) begin
-			r[i] <= r_nxt[i];
-		end
+		for (i=0; i<32; i=i+1) r[i] <= r_nxt[i];
 		inst_reg <= inst_nxt;
 		ALU_out_reg <= ALU_out;
 	end
