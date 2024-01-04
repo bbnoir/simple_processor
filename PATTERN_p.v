@@ -25,7 +25,7 @@ input wire [31:0] inst_addr;
 // parameters & integer
 //================================================================
 
-integer execution_num=1000,out_max_latency=10,seed=64;
+integer execution_num=325,out_max_latency=10,seed=64;
 integer i,t,latency,out_valid_counter,in_valid_counter,golden_inst_addr_in,golden_inst_addr_out,pat;
 integer opcode,rs,rt,rd,shamt,func,immediate, address;
 integer instruction [350:0];

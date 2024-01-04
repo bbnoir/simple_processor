@@ -43,7 +43,6 @@ wire out_valid_nxt;
 reg [31:0] inst_addr_nxt;
 
 reg [31:0] inst_reg;
-wire [31:0] inst_nxt;
 
 // R type
 wire [5:0] opcode, func;
@@ -58,8 +57,7 @@ wire [31:0] ZE, SE, ZE_reg, SE_reg;
 // Jump
 wire [25:0] jump_addr, jump_addr_reg;
 
-reg signed [31:0] ALU_out_reg;
-reg signed [31:0] ALU_out, ALU_op1, ALU_op2;
+reg signed [31:0] ALU_out_reg, ALU_out, ALU_op1, ALU_op2;
 
 // store inst addr for 1 cycle
 reg [31:0] inst_addr_reg;
@@ -68,36 +66,32 @@ reg [31:0] inst_addr_reg;
 //------------------------------------------------------------------------
 //   DESIGN
 //------------------------------------------------------------------------
-
-assign inst_nxt = (in_valid) ? inst : inst_reg;
-
-assign opcode = inst_nxt[31:26];
+assign opcode = inst[31:26];
 assign opcode_reg = inst_reg[31:26];
-assign rs = inst_nxt[25:21];
+assign rs = inst[25:21];
 assign rs_reg = inst_reg[25:21];
-assign rt = inst_nxt[20:16];
+assign rt = inst[20:16];
 assign rt_reg = inst_reg[20:16];
-assign rd = inst_nxt[15:11];
+assign rd = inst[15:11];
 assign rd_reg = inst_reg[15:11];
-assign shamt = inst_nxt[10:6];
+assign shamt = inst[10:6];
 assign shamt_reg = inst_reg[10:6];
-assign func = inst_nxt[5:0];
+assign func = inst[5:0];
 assign func_reg = inst_reg[5:0];
-assign imme = inst_nxt[15:0];
+assign imme = inst[15:0];
 assign imme_reg = inst_reg[15:0];
 assign ZE = {16'd0, imme};
 assign ZE_reg = {16'd0, imme_reg};
 assign SE = {{16{imme[15]}}, imme};
 assign SE_reg = {{16{imme_reg[15]}}, imme_reg};
-assign jump_addr = inst_nxt[25:0];
+assign jump_addr = inst[25:0];
 assign jump_addr_reg = inst_reg[25:0];
 
 // PC
 always@(*) begin
 	inst_addr_nxt = inst_addr;
-	if (in_valid) begin
+	if (in_valid)
 		inst_addr_nxt = inst_addr + 4;
-	end
 	if (out_valid_buf) begin
 		case(opcode)
 			0: if (func == 7) inst_addr_nxt = r[rs]; // jr
@@ -148,8 +142,7 @@ end
 
 // regiter
 always@(*) begin
-	for (i=0; i<32; i=i+1)
-		r_nxt[i] = r[i];
+	for (i=0; i<32; i=i+1) r_nxt[i] = r[i];
 	if(out_valid_buf) begin
 		case(opcode_reg)
 			0: if(func_reg != 7) r_nxt[rd_reg] = ALU_out_reg;
@@ -178,9 +171,7 @@ always@(posedge clk or negedge rst_n) begin
 		out_valid_buf <= 0;
 		inst_addr <= 0;
 		inst_addr_reg <= 0;
-		for (i=0; i<32; i=i+1) begin
-			r[i] <= 0;
-		end
+		for (i=0; i<32; i=i+1) r[i] <= 0;
 		inst_reg <= 0;
 		ALU_out_reg <= 0;
 	end
@@ -189,10 +180,8 @@ always@(posedge clk or negedge rst_n) begin
 		out_valid_buf <= in_valid;
 		inst_addr <= inst_addr_nxt;
 		inst_addr_reg <= inst_addr;
-		for (i=0; i<32; i=i+1) begin
-			r[i] <= r_nxt[i];
-		end
-		inst_reg <= inst_nxt;
+		for (i=0; i<32; i=i+1) r[i] <= r_nxt[i];
+		inst_reg <= inst;
 		ALU_out_reg <= ALU_out;
 	end
 end
