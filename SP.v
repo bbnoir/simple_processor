@@ -81,8 +81,8 @@ assign imme = inst_nxt[15:0];
 assign imme_reg = inst_reg[15:0];
 assign ZE = {16'd0, imme};
 assign ZE_reg = {16'd0, imme_reg};
-assign SE = {{16{imme[15]}}, imme};
-assign SE_reg = {{16{imme_reg[15]}}, imme_reg};
+assign SE = {{16{imme[15]}}, imme}; // sign extend
+assign SE_reg = {{16{imme_reg[15]}}, imme_reg}; // sign extend
 assign jump_addr = inst_nxt[25:0];
 assign jump_addr_reg = inst_reg[25:0];
 
@@ -165,6 +165,7 @@ always@(*) begin
 	end
 end
 
+// sequential 
 always@(posedge clk or negedge rst_n) begin
 	if(!rst_n) begin
 		out_valid <= 0;
