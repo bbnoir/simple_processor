@@ -4,7 +4,7 @@ The project is to implement a simple processor with a simple ISA based on MIPS. 
 For more information, please refer to the [specification](./CO_2023_FinalProject.pdf).
 
 ## Test
-To test using icarus verilog, run the following command:
+To test using [icarus verilog](https://bleyer.org/icarus/), run the following command:
 ```bash
 iverilog -o test testbench.v
 ```
